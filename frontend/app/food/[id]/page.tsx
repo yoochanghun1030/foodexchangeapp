@@ -38,6 +38,15 @@ export default function FoodDetailPage() {
             .catch(() => alert('❌ Failed to load food details.'));
     }, [id]);
 
+    function formatCategory(rawCategory: string): string {
+        if (!rawCategory) return 'Unknown';
+        const parts = rawCategory.split(':');
+        const category = parts.length > 1 ? parts[1] : rawCategory;
+        return category
+            .replace(/-/g, ' ')
+            .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
     if (!food) return <p>Loading…</p>;
 
     const baseUrl =
@@ -57,9 +66,11 @@ export default function FoodDetailPage() {
     return (
         <div style={{ padding: 20, maxWidth: 800, margin: '0 auto' }}>
             <h1>{food.title}</h1>
+
             <p>
-                <strong>Category:</strong> {food.category}
+                <strong>Category:</strong> {formatCategory(food.category)}
             </p>
+
             <pre style={{ whiteSpace: 'pre-wrap' }}>{food.nutritionFacts}</pre>
 
             {food.imageUrl && (
